@@ -11,12 +11,11 @@ Gem::Specification.new do |gem|
   gem.files         = `git ls-files`.split($\)
   gem.executables   = gem.files.grep(%r{^bin/}).map{ |f| File.basename(f) }
   gem.test_files    = gem.files.grep(%r{^(test|spec|features)/})
-  gem.name          = "frenzy_bunnies"
+  gem.name          = "boardintel_frenzy_bunnies"
   gem.require_paths = ["lib"]
   gem.version       = FrenzyBunnies::VERSION
-  
-  gem.add_runtime_dependency 'march_hare', '~> 2.3'
-  gem.add_runtime_dependency 'thor'
+
+  gem.add_runtime_dependency 'march_hare'
   gem.add_runtime_dependency 'sinatra'
   gem.add_runtime_dependency 'atomic'
   gem.add_runtime_dependency 'json'
