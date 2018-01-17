@@ -15,10 +15,10 @@ Gem::Specification.new do |gem|
   gem.require_paths = ["lib"]
   gem.version       = FrenzyBunnies::VERSION
 
-  gem.add_runtime_dependency 'march_hare'
-  gem.add_runtime_dependency 'sinatra'
-  gem.add_runtime_dependency 'atomic'
-  gem.add_runtime_dependency 'json'
+  gem.add_runtime_dependency 'march_hare', "= 3.0.0"
+  gem.add_runtime_dependency 'sinatra', "= 1.4.8"
+  gem.add_runtime_dependency 'atomic', "= 1.1.99"
+  gem.add_runtime_dependency 'json', "= 1.8.6"
 
   gem.add_development_dependency 'guard-coffeescript'
   gem.add_development_dependency 'rr'
