@@ -42,33 +42,34 @@ module FrenzyBunnies::Worker
 
       q = context.queue_factory.build_queue(@queue_name, @queue_opts)
 
-      say "#{@queue_opts[:threads] ? "#{@queue_opts[:threads]} threads " : ''}with #{@queue_opts[:prefetch]} prefetch on <#{@queue_name}>."
+      say "#{@queue_opts[:threads]} with #{@queue_opts[:prefetch]} prefetch on <#{@queue_name}>."
 
-      q.subscribe(:ack => true, :blocking => false, :executor => @thread_pool) do |headers, msg|
-        worker = new
-        handler = @queue_opts[:handler].new(headers.channel, q, @logger, { queue_options: @queue_opts })
-        begin
-          Timeout::timeout(@queue_opts[:timeout_job_after]) do
-            if worker.work(msg)
-              handler.acknowledge(headers, msg)
-              incr! :passed
-            else
-              handler.reject(headers, msg)
-              incr! :failed
-              error "REJECTED", msg
+      q.subscribe(:ack => true, :blocking => false) do |headers, msg|
+        @thread_pool.submit do
+          worker = new
+          handler = @queue_opts[:handler].new(headers.channel, q, @logger, { queue_options: @queue_opts })
+          begin
+            Timeout::timeout(@queue_opts[:timeout_job_after]) do
+              if worker.work(msg)
+                handler.acknowledge(headers, msg)
+                incr! :passed
+              else
+                handler.reject(headers, msg)
+                incr! :failed
+                error "REJECTED", msg
+              end
             end
+          rescue Timeout::Error
+            handler.timeout(headers, msg)
+            incr! :failed
+            error "TIMEOUT #{@queue_opts[:timeout_job_after]}s", msg
+          rescue
+            handler.reject(headers, msg)
+            incr! :failed
+            error "ERROR #{$!}", msg
           end
-        rescue Timeout::Error
-          handler.timeout(headers, msg)
-          incr! :failed
-          error "TIMEOUT #{@queue_opts[:timeout_job_after]}s", msg
-        rescue
-          handler.reject(headers, msg)
-          incr! :failed
-          error "ERROR #{$!}", msg
         end
       end
-
       say "workers up."
     end
 
