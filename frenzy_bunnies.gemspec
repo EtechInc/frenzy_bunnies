@@ -14,6 +14,7 @@ Gem::Specification.new do |gem|
   gem.name          = "boardintel_frenzy_bunnies"
   gem.require_paths = ["lib"]
   gem.version       = FrenzyBunnies::VERSION
+  gem.platform      = "java"
 
   gem.add_runtime_dependency 'march_hare', "= 3.0.0"
   gem.add_runtime_dependency 'sinatra', "= 1.4.8"
