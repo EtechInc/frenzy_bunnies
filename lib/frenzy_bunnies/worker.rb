@@ -1,4 +1,4 @@
-require 'atomic'
+require 'concurrent'
 
 module FrenzyBunnies::Worker
   def ack!
@@ -24,7 +24,10 @@ module FrenzyBunnies::Worker
     end
 
     def start(context)
-      @jobs_stats = { :failed => Atomic.new(0), :passed => Atomic.new(0) }
+      @jobs_stats = { 
+        :failed => Concurrent::AtomicFixnum.new(0), 
+        :passed => Concurrent::AtomicFixnum.new(0) 
+      }
       @working_since = Time.now
 
       @logger = context.logger

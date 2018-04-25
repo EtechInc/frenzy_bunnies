@@ -11,15 +11,15 @@ Gem::Specification.new do |gem|
   gem.files         = `git ls-files`.split($\)
   gem.executables   = gem.files.grep(%r{^bin/}).map{ |f| File.basename(f) }
   gem.test_files    = gem.files.grep(%r{^(test|spec|features)/})
-  gem.name          = "boardintel_frenzy_bunnies"
+  gem.name          = "frenzy_bunnies"
   gem.require_paths = ["lib"]
   gem.version       = FrenzyBunnies::VERSION
   gem.platform      = "java"
 
-  gem.add_runtime_dependency 'march_hare', "= 3.0.0"
-  gem.add_runtime_dependency 'sinatra', "= 1.4.8"
-  gem.add_runtime_dependency 'atomic', "= 1.1.99"
-  gem.add_runtime_dependency 'json', "= 1.8.6"
+  gem.add_runtime_dependency 'march_hare', "~> 3.0.0"
+  gem.add_runtime_dependency 'sinatra', "~> 1.4.8"
+  gem.add_runtime_dependency 'concurrent-ruby'
+  gem.add_runtime_dependency 'json'
 
   gem.add_development_dependency 'guard-coffeescript'
   gem.add_development_dependency 'rr'
