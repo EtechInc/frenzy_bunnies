@@ -19,7 +19,12 @@ class FrenzyBunnies::Context
     (params[:username], params[:password] = @opts[:username], @opts[:password]) if @opts[:username] && @opts[:password]
     (params[:port] = @opts[:port]) if @opts[:port]
     @connection = MarchHare.connect(params)
-    @connection.add_shutdown_listener(lambda { |cause| @logger.error("Disconnected: #{cause}"); stop;})
+
+    # NOTE: Commented this out because the MarchHare connection would return, but the listeners were all stopped
+    #       with no mechanism to start them again automatically.  From local testing, an outage that returns
+    #       will continue to consume messages as expected when the connection returns if this stop is removed
+    #
+    # @connection.add_shutdown_listener(lambda { |cause| @logger.error("Disconnected: #{cause}"); stop;})
 
     @queue_factory = FrenzyBunnies::QueueFactory.new(@connection)
   end
