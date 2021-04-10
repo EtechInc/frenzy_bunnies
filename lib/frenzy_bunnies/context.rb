@@ -18,6 +18,7 @@ class FrenzyBunnies::Context
     params = {:host => @opts[:host], :heartbeat_interval => @opts[:heartbeat]}
     (params[:username], params[:password] = @opts[:username], @opts[:password]) if @opts[:username] && @opts[:password]
     (params[:port] = @opts[:port]) if @opts[:port]
+    (params[:ssl] = @opts[:ssl]) if @opts[:ssl]
     @connection = MarchHare.connect(params)
 
     # NOTE: Commented this out because the MarchHare connection would return, but the listeners were all stopped
